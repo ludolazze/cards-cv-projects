@@ -46,7 +46,7 @@ class CardDetector():
         card_projected_contour[3, :] = np.array([card_img_width, 0])
 
         card_img_list = []
-
+        homographies = []
         for c in contours:
 
             first_edge_length = np.linalg.norm(c[0, :, :] - c[1, :, :])
@@ -58,8 +58,9 @@ class CardDetector():
             h, _ = cv2.findHomography(c, card_projected_contour)
             card_img = cv2.warpPerspective(img, h, (card_img_width, card_img_height))
             card_img_list.append(card_img)
-            cv2.imshow('warped', card_img)
-            cv2.waitKey(0)
+            homographies.append(h)
+
+        return card_img_list, homographies
 
 
     def preprocess_image(self, image):
